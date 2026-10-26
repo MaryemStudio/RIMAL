@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>RIMAL Admin | Restaurant Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <script src="admin.js" defer></script>
+</head>
+
+<body>
+    <div class="admin-shell">
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" href="index.html" aria-label="RIMAL public website">
+                <span class="brand-name">RIMAL</span>
+                <span class="brand-subtitle">CONTEMPORARY MOROCCAN DINING</span>
+            </a>
+            <div class="sidebar-label">WORKSPACE</div>
+            <nav class="side-nav" aria-label="Admin navigation">
+                <button class="nav-item active" type="button" data-view="overview"><span class="nav-icon">◫</span>
+                    Overview</button>
+                <button class="nav-item" type="button" data-view="menu"><span class="nav-icon">✧</span> Menu management
+                    <span class="nav-count" id="navMenuCount">0</span></button>
+                <button class="nav-item" type="button" data-view="reservations"><span class="nav-icon">▦</span>
+                    Reservations <span class="nav-count" id="navReservationCount">0</span></button>
+                <button class="nav-item" type="button" data-view="messages"><span class="nav-icon">✉</span> Messages
+                    <span class="nav-count" id="navMessageCount">0</span></button>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="status-dot"></div>
+                <div><strong>Restaurant workspace</strong><small>SQLite database</small></div>
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <button class="mobile-menu-toggle" id="sidebarToggle" type="button"
+                    aria-label="Toggle navigation">☰</button>
+                <div class="breadcrumb"><span>RIMAL</span><span class="crumb-separator">/</span><strong
+                        id="pageCrumb">Overview</strong></div>
+                <div class="topbar-actions">
+                    <span class="demo-pill"><span></span> LOCAL ADMIN</span>
+                    <a class="view-site" href="index.html" target="_blank" rel="noopener">View website ↗</a>
+                </div>
+            </header>
+
+            <div class="content-wrap">
+                <section class="view active" id="view-overview">
+                    <div class="page-heading heading-row">
+                        <div>
+                            <p class="eyebrow">YOUR RESTAURANT, AT A GLANCE</p>
+                            <h1>Good evening, <em>RIMAL.</em></h1>
+                            <p class="subheading">Manage your menu and keep up with guest requests.</p>
+                        </div>
+                        <button class="button button-primary" type="button" data-action="add-menu">＋ Add a dish</button>
+                    </div>
+                    <div class="stats-grid">
+                        <article class="stat-card">
+                            <div class="stat-card-top"><span>Menu items</span><span class="stat-icon">✧</span></div>
+                            <strong id="statMenu">0</strong>
+                            <p>Across all categories</p>
+                        </article>
+                        <article class="stat-card">
+                            <div class="stat-card-top"><span>Reservations</span><span class="stat-icon">▦</span></div>
+                            <strong id="statReservations">0</strong>
+                            <p>Total requests received</p>
+                        </article>
+                        <article class="stat-card">
+                            <div class="stat-card-top"><span>Pending requests</span><span
+                                    class="stat-icon gold-icon">◷</span></div><strong id="statPending">0</strong>
+                            <p>Waiting for confirmation</p>
+                        </article>
+                        <article class="stat-card">
+                            <div class="stat-card-top"><span>Messages</span><span class="stat-icon">✉</span></div>
+                            <strong id="statMessages">0</strong>
+                            <p>Guest enquiries received</p>
+                        </article>
+                    </div>
+                    <div class="overview-grid">
+                        <section class="panel quick-panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <p class="eyebrow">QUICK ACTIONS</p>
+                                    <h2>What would you like to do?</h2>
+                                </div>
+                            </div>
+                            <button class="quick-action" type="button" data-action="add-menu"><span
+                                    class="quick-symbol">＋</span><span><strong>Add a new dish</strong><small>Publish a
+                                        dish to the website menu</small></span><span class="arrow">→</span></button>
+                            <button class="quick-action" type="button" data-view="reservations"><span
+                                    class="quick-symbol">▦</span><span><strong>Review
+                                        reservations</strong><small>Confirm or cancel guest requests</small></span><span
+                                    class="arrow">→</span></button>
+                            <button class="quick-action" type="button" data-view="messages"><span
+                                    class="quick-symbol">✉</span><span><strong>Read messages</strong><small>Check guest
+                                        questions and enquiries</small></span><span class="arrow">→</span></button>
+                        </section>
+                        <section class="panel recent-panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <p class="eyebrow">LATEST REQUESTS</p>
+                                    <h2>Recent reservations</h2>
+                                </div><button class="text-button" type="button" data-view="reservations">View all
+                                    →</button>
+                            </div>
+                            <div id="recentReservations" class="compact-list"></div>
+                        </section>
+                    </div>
+                    <div class="notice"><span class="notice-mark">i</span>
+                        <p><strong>Local database:</strong> this dashboard stores menu items, reservations and messages
+                            in a SQLite database on this computer. It is a local development setup, not a public
+                            production service.</p>
+                    </div>
+                </section>
+
+                <section class="view" id="view-menu">
+                    <div class="page-heading heading-row">
+                        <div>
+                            <p class="eyebrow">FOOD & DRINKS</p>
+                            <h1>Menu <em>management.</em></h1>
+                            <p class="subheading">Changes are saved in the RIMAL SQLite database and appear on the
+                                public website after refresh.</p>
+                        </div><button class="button button-primary" type="button" data-action="add-menu">＋ Add a
+                            dish</button>
+                    </div>
+                    <div class="toolbar"><label class="search-box"><span>⌕</span><input type="search" id="menuSearch"
+                                placeholder="Search dishes..." autocomplete="off"></label><label
+                            class="select-wrap"><span class="sr-only">Filter menu by category</span><select
+                                id="menuCategoryFilter">
+                                <option value="all">All categories</option>
+                                <option value="starters">Starters</option>
+                                <option value="main">Main Dishes</option>
+                                <option value="chef">Chef's Selection</option>
+                                <option value="desserts">Desserts</option>
+                                <option value="drinks">Drinks</option>
+                                <option value="hot">Hot Drinks</option>
+                            </select></label><span id="menuResultCount" class="result-count">0 dishes</span></div>
+                    <section class="panel table-panel">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Dish</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th class="actions-cell">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menuTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div id="menuEmpty" class="empty-state" hidden><span class="empty-icon">✧</span>
+                            <h3>No dishes found</h3>
+                            <p>Try a different search or add a new dish.</p>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="view" id="view-reservations">
+                    <div class="page-heading">
+                        <p class="eyebrow">GUEST MANAGEMENT</p>
+                        <h1>Reservations <em>book.</em></h1>
+                        <p class="subheading">Review requests received through the reservation form.</p>
+                    </div>
+                    <div class="toolbar"><label class="search-box"><span>⌕</span><input type="search"
+                                id="reservationSearch" placeholder="Search guest or date..."
+                                autocomplete="off"></label><label class="select-wrap"><span class="sr-only">Filter by
+                                reservation status</span><select id="reservationStatusFilter">
+                                <option value="all">All statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select></label><span id="reservationResultCount" class="result-count">0 requests</span>
+                    </div>
+                    <section class="panel table-panel">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Guest</th>
+                                        <th>Date & time</th>
+                                        <th>Guests & Special Request </th>
+                                        <th>Status</th>
+                                        <th class="actions-cell">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reservationTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div id="reservationEmpty" class="empty-state" hidden><span class="empty-icon">▦</span>
+                            <h3>No reservations yet</h3>
+                            <p>New requests submitted on the main website are stored in the local SQLite database.</p>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="view" id="view-messages">
+                    <div class="page-heading">
+                        <p class="eyebrow">GUEST COMMUNICATION</p>
+                        <h1>Guest <em>messages.</em></h1>
+                        <p class="subheading">Messages sent through a supported contact form appear here.</p>
+                    </div>
+                    <div class="toolbar"><label class="search-box"><span>⌕</span><input type="search" id="messageSearch"
+                                placeholder="Search messages..." autocomplete="off"></label><span
+                            id="messageResultCount" class="result-count">0 messages</span></div>
+                    <div id="messagesList" class="messages-grid"></div>
+                    <div id="messagesEmpty" class="panel empty-state" hidden><span class="empty-icon">✉</span>
+                        <h3>No messages yet</h3>
+                        <p>Connect a contact form on the public website to collect enquiries here.</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="dishModal" hidden>
+        <section class="dish-modal" role="dialog" aria-modal="true" aria-labelledby="dishModalTitle">
+            <header class="modal-header">
+                <div>
+                    <p class="eyebrow">PUBLIC MENU</p>
+                    <h2 id="dishModalTitle">Add a dish</h2>
+                </div><button class="icon-button" type="button" data-close-modal aria-label="Close">×</button>
+            </header>
+            <form id="dishForm">
+                <input type="hidden" id="dishId">
+                <div class="form-grid">
+                    <label class="form-field full-field">Dish name<input id="dishName" name="name" type="text"
+                            maxlength="90" placeholder="e.g. Tajine de Poulet" required></label>
+                    <label class="form-field">Category<select id="dishCategory" name="category" required>
+                            <option value="starters">Starters</option>
+                            <option value="main">Main Dishes</option>
+                            <option value="chef">Chef's Selection</option>
+                            <option value="desserts">Desserts</option>
+                            <option value="drinks">Drinks</option>
+                            <option value="hot">Hot Drinks</option>
+                        </select></label>
+                    <label class="form-field">Price (DH)<input id="dishPrice" name="price" type="number" min="0"
+                            max="99999" step="0.01" placeholder="95.00" required></label>
+                    <label class="form-field full-field">Image URL<input id="dishImage" name="image" type="url"
+                            placeholder="https://..." required><small>Use a direct image URL starting with
+                            https://.</small></label>
+                    <label class="form-field full-field">Description<textarea id="dishDescription" name="description"
+                            rows="3" maxlength="260" placeholder="Describe the dish and its ingredients..."
+                            required></textarea></label>
+                </div>
+                <p class="form-error" id="dishFormError" role="alert"></p>
+                <div class="modal-actions"><button class="button button-quiet" type="button"
+                        data-close-modal>Cancel</button><button class="button button-primary" type="submit"
+                        id="dishSubmitButton">Save dish</button></div>
+            </form>
+        </section>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+
+</html>
